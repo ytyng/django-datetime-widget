@@ -195,27 +195,16 @@ class PickerWidgetMixin(object):
             # Javascript data format for the options dictionary
             self.is_localized = True
 
-            # Get format from django format system
-            self.format = get_format(self.format_name)[0]
-
-            # Convert Python format specifier to Javascript format specifier
-            self.options['format'] = toJavascript_re.sub(
-                lambda x: dateConversiontoJavascript[x.group()],
-                self.format
-                )
-
             # Set the local language
             self.options['language'] = get_supported_language(get_language())
 
-        else:
-
-            # If we're not doing localisation, get the Javascript date format provided by the user,
-            # with a default, and convert it to a Python data format for later string parsing
-            format = self.options['format']
-            self.format = toPython_re.sub(
-                lambda x: dateConversiontoPython[x.group()],
-                format
-                )
+        # Get the Javascript date format provided by the user,
+        # with a default, and convert it to a Python data format for later string parsing
+        format = self.options['format']
+        self.format = toPython_re.sub(
+            lambda x: dateConversiontoPython[x.group()],
+            format
+            )
 
         super(PickerWidgetMixin, self).__init__(attrs, format=self.format)
 
